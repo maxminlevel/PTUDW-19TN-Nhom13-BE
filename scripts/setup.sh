@@ -1,5 +1,6 @@
 #!/bin/bash
-
+set -e
 npm i
 npm i --save-dev
-sudo apt install postgresql
+npm docker:setup
+npm docker:up && npm run start

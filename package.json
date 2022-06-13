@@ -15,8 +15,11 @@
     "dist:db:re-index": "node -r dotenv/config dist/db-cli re-index",
     "dist:db:seed": "node -r dotenv/config dist/db-cli seed",
     "dist:db:migrate": "node -r dotenv/config dist/db-cli migrate",
-    "docker:image": "./scripts/docker-image.sh",
-    "setup": "bash scripts/setup.sh"
+    "setup": "bash scripts/setup.sh",
+    "docker:setup": "export $(cat .env); envsubst < ./docker/template.yml > ./docker/docker-compose.yml",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up",
+    "docker:image": "sh ./scripts/docker-image.sh",
+    "env:hide": "sh ./scripts/env-hide.sh"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -29,6 +32,9 @@
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
     "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.20.1",
+    "winston": "^3.7.2",
     "xss-clean": "^0.1.1"
   }
 }

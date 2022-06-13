@@ -3,7 +3,7 @@ const app = require('./app')
 
 dotenv.config({path: './.env'})
 const config = {}
-const port = process.env.PORT || 3000
+const port = process.env.SERVER_PORT || 3000
 app.listen(port, () => {
-  console.log(`App running on port ${port}...`)
+  console.log(`App running on http://localhost:${port}...`)
 })
