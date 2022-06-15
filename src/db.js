@@ -7,16 +7,17 @@ const pool = new Pool({
   host: process.env.POSTGRES_HOST,
   database: process.env.POSTGRES_DB,
   password: process.env.POSTGRES_PASSWORD,
-  port: 5432,
+  port: process.env.POSTGRES_PORT,
 })
 
-const getUsers = (request, response) => {
+const getUsers = (request, response, next) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
     response.status(200).json(results.rows)
   })
+  // next()
 }
 
 const getUserById = (request, response) => {
