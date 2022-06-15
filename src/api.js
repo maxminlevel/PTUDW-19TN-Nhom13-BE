@@ -3,17 +3,18 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const xss = require('xss-clean')
 const cors = require('cors')
-const app = express()
 const path = require('path')
-require('dotenv').config()
 const glob = require('glob')
 const _ = require('lodash')
-const expressHbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const expressHbs = require('express-handlebars')
+const express_handlebars_sections = require('express-handlebars-sections')
+const {assignObjOnce} = require('./helpers/object')
 
-const initMidlewareBef = () => {
+const initMidlewareBef = (ctx) => {
+  const {app} = ctx
   const whitelist =
-    '127.0.0.1' && process.env.ACCESS_CONTROL_ALLOW_ORIGIN.split(',')
+    '127.0.0.1' && ctx.config.ACCESS_CONTROL_ALLOW_ORIGIN.split(',')
   const corsOptions = {
     origin: function (origin, callback) {
       if (!origin) callback(null, true)
@@ -34,7 +35,8 @@ const initMidlewareBef = () => {
   app.set('etag', false)
 }
 
-const initMidlewareAft = () => {
+const initMidlewareAft = (ctx) => {
+  const {app} = ctx
   app.use(function (req, res, next) {
     res.status(404)
 
@@ -50,7 +52,8 @@ const initMidlewareAft = () => {
   })
 }
 
-const initRoutes = () => {
+const initRoutes = (ctx) => {
+  const {app} = ctx
   const routePath = path.resolve(__dirname, 'routes')
   const priorityRouters = glob.sync(path.join(routePath, '**/index.js'), {
     dot: true,
@@ -74,7 +77,8 @@ const initRoutes = () => {
   })
 }
 
-const initEngineView = () => {
+const initEngineView = (ctx) => {
+  const {app} = ctx
   const hbs = expressHbs.create({
     extname: 'hbs',
     defaultLayout: 'main',
@@ -86,115 +90,36 @@ const initEngineView = () => {
   app.set('view engine', 'hbs')
   app.set('views', path.join(__dirname, 'views'))
   app.use(express.static(path.join(__dirname, './public')))
-
-  app.get('/', (req, res) => {
-    res.render('index', {
-      author: 'Group 13',
-    })
-  })
-
-  const {emotions, categories, products, zodiacs} = require('./data')
-
-  app.get('/task1', (req, res) => {
-    res.render('task1', {
-      author: '19120015 - Trinh Nguyen Hung',
-      emotions: emotions,
-    })
-  })
-
-  app.get('/task2', (req, res) => {
-    let salary = parseFloat(req.query.salary || 0)
-    jars = [
-      (salary * 55) / 100,
-      (salary * 10) / 100,
-      (salary * 5) / 100,
-      (salary * 10) / 100,
-      (salary * 10) / 100,
-      (salary * 10) / 100,
-    ]
-    res.render('task2', {
-      author: '19120690 - Võ Văn Toàn',
-      salary: salary,
-      jars: jars,
-    })
-  })
-
-  app.post('/task2', (req, res) => {
-    let salary = parseFloat(req.body.salary || 0)
-    jars = [
-      (salary * 55) / 100,
-      (salary * 10) / 100,
-      (salary * 5) / 100,
-      (salary * 10) / 100,
-      (salary * 10) / 100,
-      (salary * 10) / 100,
-    ]
-    res.render('task2', {
-      author: '19120690 - Võ Văn Toàn',
-      salary: salary,
-      jars: jars,
-    })
-  })
-
-  app.get('/task2/jars', (req, res) => {
-    let salary = parseFloat(req.query.salary || 0)
-    jars = {
-      'Necessity account': (salary * 55) / 100,
-      'Financial freedom account': (salary * 10) / 100,
-      'Give Account': (salary * 5) / 100,
-      'Education account': (salary * 10) / 100,
-      'Long-term saving for spending account': (salary * 10) / 100,
-      'Play account': (salary * 10) / 100,
-    }
-    res.json({jars, salary})
-  })
-
-  app.get('/task3', (req, res) => {
-    let catID = req.query.catID || 0
-    let _products = products
-
-    if (catID) {
-      _products = products.filter((item) => item.category == catID)
-    }
-
-    res.render('task3', {
-      author: '19120033 - Phan Lộc Sơn',
-      categories: categories,
-      products: _products,
-    })
-  })
-
-  app.get('/task4', (req, res) => {
-    res.locals.zodiacs = zodiacs
-
-    res.render('task4', {
-      author: '19120732 - Nguyễn Xuân Vỵ',
-    })
-  })
-
-  app.get('/task4/:name', (req, res) => {
-    res.locals.zodiac = zodiacs.filter(
-      (item) => item.name == req.params.name
-    )[0]
-
-    res.render('task4-details', {
-      author: '19120732 - Nguyễn Xuân Vỵ',
-    })
-  })
 }
 
-const init = (ctx = null) => {
-  initMidlewareBef()
-  initEngineView()
-  initRoutes()
-  // initMidlewareAft()
+const init = async (ctx) => {
+  const app = express()
+  return {app}
 }
 
-const start = () => {
-  const port = process.env.SERVER_PORT || 3000
+const start = async (ctx) => {
+  const {config, instances} = ctx
+  const {app} = instances
+
+  const apiContext = assignObjOnce(
+    {},
+    {
+      ...instances,
+      app,
+      config,
+      instances,
+    }
+  )
+  initMidlewareBef(apiContext)
+  initEngineView(apiContext)
+  initRoutes(apiContext)
+  initMidlewareAft(apiContext)
+
+  const port = ctx.config.SERVER_PORT || 3000
   app.listen(port, () => {
     console.log(`App running on http://localhost:${port}`)
   })
+  return {app}
 }
 
 module.exports = {

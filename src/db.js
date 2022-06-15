@@ -1,6 +1,3 @@
-// load dao automatic from daos
-// then assign to ctx
-
 const {Pool, Client} = require('pg')
 const pool = new Pool({
   user: process.env.POSTGRES_USER,
@@ -40,7 +37,6 @@ const createUser = (request, response) => {
       if (error) {
         throw error
       }
-      console.log(typeof results)
       response
         .status(201)
         .send(`User added: ${JSON.stringify(results.rows[0])}`)

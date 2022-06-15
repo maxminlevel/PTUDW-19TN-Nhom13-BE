@@ -1,6 +1,6 @@
-function applyExtraSetup(sequelize) {
+function applyExtraSetup(ctx) {
+  const {sequelize} = ctx
   // Code go here
-  sequelize.models.Task.create({title: 'foodfs', rating: 5})
 }
 
 module.exports = {applyExtraSetup}
