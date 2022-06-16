@@ -1,14 +1,11 @@
 const {DataTypes} = require('sequelize')
 
 const init = (sequelize) => {
-  const Pack = sequelize.define('Pack', {
+  const ProductCategory = sequelize.define('ProductCategory', {
     Name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    LimitByProd: {type: DataTypes.INTEGER},
-    LimitByTime: {type: DataTypes.INTEGER},
-    TimeLimit: {type: DataTypes.STRING},
   })
 }
 

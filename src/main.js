@@ -3,15 +3,10 @@ const api = require('./api')
 const db = require('./db-sub')
 const {assignObjOnce} = require('./helpers/object')
 const util = require('util')
+const config = require('./config')
 
 const startApp = async () => {
-  const ctx = assignObjOnce(
-    {},
-    {
-      config: dotenv.config().parsed,
-      instances: {},
-    }
-  )
+  const ctx = config.init()
   process.on('uncaughtException', (e) => {
     console.log('Exiting due to unhandled exception', util.inspect(e))
     process.exit(1)

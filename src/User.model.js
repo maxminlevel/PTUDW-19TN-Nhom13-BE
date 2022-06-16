@@ -1,20 +1,15 @@
 const {DataTypes} = require('sequelize')
-
 const init = (sequelize) => {
   const User = sequelize.define('User', {
-    Username: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Password: {
+    lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    Status: {
-      type: DataTypes.STRING,
-      defaultValue: 'UNLOCK',
     },
   })
+  return User
 }
 
 module.exports = {

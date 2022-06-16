@@ -1,8 +1,14 @@
-var dotenv = require('dotenv')
-dotenv.config({path: './.env'})
+const {assignObjOnce} = require('../helpers/object')
 
-const port = process.env.PORT || 3000
+const init = (rawConfig = {}) => {
+  return assignObjOnce(
+    {},
+    {
+      config: require('dotenv').config().parsed,
+      instances: {},
+    },
+    {...rawConfig}
+  )
+}
 
-const config = () => {}
-
-module.exports = config
+module.exports = {init}

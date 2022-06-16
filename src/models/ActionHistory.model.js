@@ -1,18 +1,18 @@
 const {DataTypes} = require('sequelize')
 
 const init = (sequelize) => {
-  const User = sequelize.define('User', {
-    Username: {
-      type: DataTypes.STRING,
+  const ActionHistory = sequelize.define('ActionHistory', {
+    Time: {
+      type: DataTypes.TIME,
       allowNull: false,
     },
-    Password: {
+    Action: {
       type: DataTypes.STRING,
+      defaultValue: 'DO SOMETHING',
       allowNull: false,
     },
-    Status: {
-      type: DataTypes.STRING,
-      defaultValue: 'UNLOCK',
+    Description: {
+      type: DataTypes.TEXT,
     },
   })
 }

@@ -5,17 +5,17 @@ const {glob} = require('glob')
 const _ = require('lodash')
 const {assignObjOnce} = require('./helpers/object')
 
-const initSchemas = (ctx) => {
+const initSchemas = async (ctx) => {
   const {sequelize} = ctx
   const modelPath = path.resolve(__dirname, 'models')
   const models = glob.sync(path.join(modelPath, '**/*.model.js'), {
     dot: true,
   })
   _.each([...models], (filePath) => {
-    const model = require(filePath)
+    const modelFile = require(filePath)
     const {name: modelName} = path.parse(filePath)
     const name = _.replace(modelName, /(^index$)|(\.model$)/, '')
-    model.init(sequelize)
+    modelFile.init(sequelize)
     console.log(`-> table: ${name}`)
   })
 }
@@ -41,15 +41,17 @@ const start = async (ctx) => {
       instances,
     }
   )
-  console.log(ctx)
   try {
     sequelize.authenticate()
     console.log('Connection has been established successfully.')
     initSchemas(dbContext)
-    applyExtraSetup(dbContext)
+    applyExtraSetup(dbContext) // await sequelize.sync({force: true})
+    await sequelize.sync({alter: true})
+    console.log('All models were synchronized successfully.')
   } catch (error) {
     console.error('Unable to connect to the database:', error)
   }
+
   return {sequelize}
 }
 

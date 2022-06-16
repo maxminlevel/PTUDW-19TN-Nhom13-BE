@@ -1,18 +1,23 @@
 const {DataTypes} = require('sequelize')
 
 const init = (sequelize) => {
-  const User = sequelize.define('User', {
-    Username: {
+  const Patient = sequelize.define('Patient', {
+    Fullname: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Password: {
+    CitizenId: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    DoB: {
+      type: DataTypes.DATE,
+    },
+    Address: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     Status: {
       type: DataTypes.STRING,
-      defaultValue: 'UNLOCK',
     },
   })
 }

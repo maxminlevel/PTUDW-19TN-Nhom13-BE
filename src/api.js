@@ -9,7 +9,11 @@ const _ = require('lodash')
 const bodyParser = require('body-parser')
 const expressHbs = require('express-handlebars')
 const express_handlebars_sections = require('express-handlebars-sections')
+const handlebars = require('handlebars')
 const {assignObjOnce} = require('./helpers/object')
+const {
+  allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access')
 
 const initMidlewareBef = (ctx) => {
   const {app} = ctx
@@ -84,6 +88,36 @@ const initEngineView = (ctx) => {
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
     partialsDir: path.join(__dirname, 'views/partials'),
+    handlebars: allowInsecurePrototypeAccess(handlebars),
+    helpers: {
+      section: express_handlebars_sections(),
+      ifCond: function (v1, operator, v2, options) {
+        switch (operator) {
+          case '==':
+            return v1 == v2 ? options.fn(this) : options.inverse(this)
+          case '===':
+            return v1 === v2 ? options.fn(this) : options.inverse(this)
+          case '!=':
+            return v1 != v2 ? options.fn(this) : options.inverse(this)
+          case '!==':
+            return v1 !== v2 ? options.fn(this) : options.inverse(this)
+          case '<':
+            return v1 < v2 ? options.fn(this) : options.inverse(this)
+          case '<=':
+            return v1 <= v2 ? options.fn(this) : options.inverse(this)
+          case '>':
+            return v1 > v2 ? options.fn(this) : options.inverse(this)
+          case '>=':
+            return v1 >= v2 ? options.fn(this) : options.inverse(this)
+          case '&&':
+            return v1 && v2 ? options.fn(this) : options.inverse(this)
+          case '||':
+            return v1 || v2 ? options.fn(this) : options.inverse(this)
+          default:
+            return options.inverse(this)
+        }
+      },
+    },
   })
 
   app.engine('hbs', hbs.engine)

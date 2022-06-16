@@ -5,7 +5,7 @@ const init = (sequelize) => {
     title: DataTypes.STRING,
     rating: {type: DataTypes.INTEGER, defaultValue: 3},
   })
-  Task.sync()
+  return Task
 }
 
 module.exports = {
