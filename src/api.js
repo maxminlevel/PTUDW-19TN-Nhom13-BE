@@ -14,6 +14,7 @@ const {assignObjOnce} = require('./helpers/object')
 const {
   allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access')
+const i18n = require('i18n')
 
 const initMidlewareBef = (ctx) => {
   const {app} = ctx
@@ -57,7 +58,7 @@ const initMidlewareAft = (ctx) => {
 }
 
 const initRoutes = (ctx) => {
-  const {app} = ctx
+  const {app, config} = ctx
   const routePath = path.resolve(__dirname, 'routes')
   const priorityRouters = glob.sync(path.join(routePath, '**/index.js'), {
     dot: true,
@@ -65,20 +66,36 @@ const initRoutes = (ctx) => {
   const routers = glob.sync(path.join(routePath, '**/*.route.js'), {
     dot: true,
   })
+  const view = glob.sync(path.join(routePath, '**/*.view.js'), {
+    dot: true,
+  })
   const orderedPriorityRouters = _.sortBy(
     priorityRouters,
     (filePath) => _.split(filePath, '/').length
   )
-  _.each([...orderedPriorityRouters, ...routers], (filePath) => {
-    const router = require(filePath)
-    const {dir: routerDir, name: routerName} = path.parse(filePath)
-    const subPath = _.replace(routerName, /(^index$)|(\.route$)/, '')
-    const fullPath = path.join(routerDir, subPath)
-    const rootPath = path.join('/', path.relative(routePath, fullPath))
+  const constructAPI = (files, prefix = '', regex = /(^index$)|(\.route$)/) => {
+    _.each(files, (filePath) => {
+      const router = require(filePath)
+      const {dir: routerDir, name: routerName} = path.parse(filePath)
+      const subPath = _.replace(routerName, regex, '')
+      const fullPath = path.join(routerDir, subPath)
+      const rootPath = path.join('/', path.relative(routePath, fullPath))
 
-    console.log(`-> api: ${rootPath}`)
-    app.use(rootPath, router)
-  })
+      _.each(router.stack, (layer) => {
+        if (rootPath != '/') {
+          console.log(`-> api: ${prefix + rootPath}` + layer.route.path.trim())
+        } else {
+          console.log(`-> api: ` + layer.route.path.trim())
+        }
+      })
+      app.use(prefix + rootPath, router)
+    })
+  }
+  constructAPI(
+    [...orderedPriorityRouters, ...routers],
+    '/api/' + config.API_VERSION
+  )
+  constructAPI([...view], '', /(^index$)|(\.view$)/)
 }
 
 const initEngineView = (ctx) => {
@@ -117,6 +134,12 @@ const initEngineView = (ctx) => {
             return options.inverse(this)
         }
       },
+      __: function () {
+        return i18n.__.apply(this, arguments)
+      },
+      __n: function () {
+        return i18n.__n.apply(this, arguments)
+      },
     },
   })
 
@@ -124,6 +147,23 @@ const initEngineView = (ctx) => {
   app.set('view engine', 'hbs')
   app.set('views', path.join(__dirname, 'views'))
   app.use(express.static(path.join(__dirname, './public')))
+
+  i18n.configure({
+    locales: ['vi', 'en'],
+    fallbacks: {en: 'vi'},
+    defaultLocale: 'vi',
+    cookie: 'locale',
+    queryParameter: 'lang',
+    directory: __dirname + '/public/locales',
+    directoryPermissions: '755',
+    autoReload: true,
+    updateFiles: true,
+    api: {
+      __: '__', //now req.__ becomes req.__
+      __n: '__n', //and req.__n can be called as req.__n
+    },
+  })
+  app.use(i18n.init)
 }
 
 const init = async (ctx) => {

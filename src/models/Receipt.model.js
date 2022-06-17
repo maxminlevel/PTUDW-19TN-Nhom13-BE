@@ -1,7 +1,6 @@
 const {DataTypes} = require('sequelize')
 
 const init = (sequelize) => {
-  console.log(__dirname)
   const Receipt = sequelize.define('Receipt', {
     Time: {type: DataTypes.TIME},
     Status: {

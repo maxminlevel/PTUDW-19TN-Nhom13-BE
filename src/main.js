@@ -4,6 +4,8 @@ const db = require('./db-sub')
 const {assignObjOnce} = require('./helpers/object')
 const util = require('util')
 const config = require('./config')
+const worker = require('./worker')
+const sandbox = require('./sandbox')
 
 const startApp = async () => {
   const ctx = config.init()
@@ -34,7 +36,9 @@ const startApp = async () => {
   const {app} = await api.init(ctx)
   assignObjOnce(ctx.instances, {app})
   await api.start(ctx)
-  // console.log(util.inspect(ctx, 0, 3, 1))
+
+  await worker.start(ctx)
+  await sandbox.start(ctx)
 }
 
 startApp()

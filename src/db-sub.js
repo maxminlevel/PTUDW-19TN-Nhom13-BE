@@ -21,17 +21,10 @@ const initSchemas = async (ctx) => {
 }
 
 const init = async (ctx) => {
-  const {config} = ctx
+  const {config, instances} = ctx
   const sequelize = new Sequelize(config.POSTGRES_URI, {
     logging: false,
   })
-  return {sequelize}
-}
-
-const start = async (ctx) => {
-  const {config, instances} = ctx
-  const {sequelize} = instances
-
   const dbContext = assignObjOnce(
     {},
     {
@@ -45,13 +38,21 @@ const start = async (ctx) => {
     sequelize.authenticate()
     console.log('Connection has been established successfully.')
     initSchemas(dbContext)
-    applyExtraSetup(dbContext) // await sequelize.sync({force: true})
-    await sequelize.sync({alter: true})
+    applyExtraSetup(dbContext)
     console.log('All models were synchronized successfully.')
   } catch (error) {
     console.error('Unable to connect to the database:', error)
   }
+  return {sequelize}
+}
 
+const start = async (ctx) => {
+  const {
+    instances: {sequelize},
+  } = ctx
+  await sequelize.sync({force: true}) // When reset database only turn on comment
+  // await sequelize.sync({alter: true}) // When reconstruct database only turn on this comment
+  // When no need to update database diagram, turn off both
   return {sequelize}
 }
 
