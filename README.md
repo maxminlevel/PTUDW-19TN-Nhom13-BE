@@ -15,7 +15,7 @@ It include many third-party libraries for developer process.
 ### Enviroment
   Copy all file ```example*``` beside then remove prefix ```example``` change the value (ask admin/dev to get). You can use this bash command to rename those file:
   ```bash
-    for f in *.env; do mv "$f" "$(echo "$f" | sed s/example//)"; done
+    for f in *.env; do cp "$f" "$(echo "$f" | sed s/example//)"; done
   ```
 
 ### Database
