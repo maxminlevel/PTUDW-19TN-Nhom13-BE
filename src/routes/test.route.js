@@ -1,5 +1,5 @@
 var router = require('express').Router()
-const db = require('../db.js')
+const db = require('../testdb')
 
 router.get('/', db.getUsers)
 router.get('/:id', db.getUserById)

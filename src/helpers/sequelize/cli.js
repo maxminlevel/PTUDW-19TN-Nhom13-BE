@@ -3,7 +3,7 @@ const {assignObjOnce} = require('../object')
 const ctx = require('../../config').init()
 
 const start = async () => {
-  const db = require('../../db-sub')
+  const db = require('../../db')
   const {sequelize} = await db.init(ctx)
   assignObjOnce(ctx.instances, {sequelize})
   await db.start(ctx)

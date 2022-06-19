@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
 const api = require('./api')
-const db = require('./db-sub')
+const db = require('./db')
 const {assignObjOnce} = require('./helpers/object')
 const util = require('util')
 const config = require('./config')
