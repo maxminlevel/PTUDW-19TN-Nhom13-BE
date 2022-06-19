@@ -13,13 +13,16 @@ It include many third-party libraries for developer process.
     npm i --save-dev
 ```
 ### Enviroment
-  Copy all file ```example*``` beside then remove prefix ```example``` change the value (ask admin/dev to get).
+  Copy all file ```example*``` beside then remove prefix ```example``` change the value (ask admin/dev to get). You can use this bash command to rename those file:
+  ```bash
+    for f in *.env; do mv "$f" "$(echo "$f" | sed s/example//)"; done
+  ```
 
 ### Database
 Load file .env into enviroment of terminal then subset them from  to docker-compose (note file .env is secret)
 ```bash
-    npm docker:setup
-    npm docker:up
+    npm run docker:setup
+    npm run docker:up
 ```
 
 
