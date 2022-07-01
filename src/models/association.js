@@ -1,7 +1,6 @@
 async function applyExtraSetup(ctx) {
   const {sequelize} = ctx
 
-  // console.log(models)
   const {
     Configuration,
     CureHistory,

@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
   })
 })
 
-const {emotions, categories, products, zodiacs} = require('../public/data')
+const {emotions, categories, products, zodiacs} = require('@/public/data')
 
 router.get('/task1', (req, res) => {
   res.render('task1', {

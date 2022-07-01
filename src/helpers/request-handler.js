@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const StatusCodes = require('http-status-codes')
-const {assignObjOnce} = require('./object')
+const {assignObjOnce} = require('@/helpers/object')
 
 const registerReqContext = (app, ctx) => {
   app.all('*', function contextCreator(req, res, next) {

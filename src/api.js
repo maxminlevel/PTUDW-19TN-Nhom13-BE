@@ -10,7 +10,7 @@ const bodyParser = require('body-parser')
 const expressHbs = require('express-handlebars')
 const express_handlebars_sections = require('express-handlebars-sections')
 const handlebars = require('handlebars')
-const {assignObjOnce} = require('./helpers/object')
+const {assignObjOnce} = require('@/helpers/object')
 const {
   allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access')
@@ -18,7 +18,7 @@ const i18n = require('i18n')
 const {
   registerReqContext,
   registerResContext,
-} = require('./helpers/request-handler')
+} = require('@/helpers/request-handler')
 
 const initMidlewareBef = (ctx) => {
   const {app} = ctx
@@ -133,7 +133,7 @@ const initEngineView = (ctx) => {
   app.engine('hbs', hbs.engine)
   app.set('view engine', 'hbs')
   app.set('views', path.join(__dirname, 'views'))
-  app.use(express.static(path.join(__dirname, './public')))
+  app.use(express.static(path.join(__dirname, '@/public')))
 
   i18n.configure({
     locales: ['vi', 'en'],

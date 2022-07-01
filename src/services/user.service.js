@@ -1,32 +1,46 @@
 const {StatusCodes} = require('http-status-codes')
-const UserDAO = require('../daos/user.dao')
-const {ClientError} = require('../helpers/error')
-const {AssetErrorCodes} = require('../enum/error-codes')
+const UserDAO = require('@/daos/user.dao')
+const {ClientError} = require('@/helpers/error')
+const {AssetErrorCodes} = require('@/enum/error-codes')
+const bcrypt = require('bcrypt')
 
 const list = async (ctx) => {
-  const result = await UserDAO.list(ctx)
-  return result
+  const results = await UserDAO.findAll(ctx)
+  return results
 }
-const detail = async (ctx, id) => {
-  const result = await UserDAO.get(ctx, id)
-  if (result.length != 1) {
-    throw new ClientError('US', AssetErrorCodes.USER_ID_INVALID)
+const getUser = async (ctx, id) => {
+  const results = await UserDAO.findOne(ctx, id)
+  if (results.length != 1) {
+    throw new ClientError({users: 'Not found'}).withCodes(
+      AssetErrorCodes.USER_NOT_FOUND
+    )
   }
-  return result
+  return results[0]
 }
 const create = async (ctx, body) => {
-  return {}
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(body.password, salt, async function (err, hash) {
+      console.log(err, hash)
+      await UserDAO.insertOne(ctx, {
+        Username: body.username,
+        Password: hash,
+        Type: body.type,
+      })
+    })
+  })
 }
 const update = async (ctx, userId, body) => {
-  return {}
+  const result = await UserDAO.updateOne(ctx, userId)
+  return result
 }
 const remove = async (ctx, userId) => {
-  return {}
+  const result = await UserDAO.deleteOne(ctx, userId)
+  return result
 }
 
 module.exports = {
   list,
-  detail,
+  getUser,
   create,
   update,
   remove,

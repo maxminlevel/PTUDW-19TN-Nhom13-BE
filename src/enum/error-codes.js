@@ -34,6 +34,8 @@ const AssetErrorCodes = KeyMirror({
   LOCATION_ID_REQUIRED: null,
   LOCATION_ID_INVALID: null,
   LOCATION_NOT_EXISTS: null,
+
+  PERMISSION_ADMIN_INVALID: null,
 })
 
 module.exports = {AssetErrorCodes}
