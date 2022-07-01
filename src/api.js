@@ -15,6 +15,10 @@ const {
   allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access')
 const i18n = require('i18n')
+const {
+  registerReqContext,
+  registerResContext,
+} = require('./helpers/request-handler')
 
 const initMidlewareBef = (ctx) => {
   const {app} = ctx
@@ -38,23 +42,6 @@ const initMidlewareBef = (ctx) => {
   app.use(bodyParser.urlencoded({extended: false}))
   app.use(bodyParser.json())
   app.set('etag', false)
-}
-
-const initMidlewareAft = (ctx) => {
-  const {app} = ctx
-  app.use(function (req, res, next) {
-    res.status(404)
-
-    // respond with html page
-    // respond with json
-    if (req.accepts('json')) {
-      res.json({error: 'Not found'})
-      return
-    }
-
-    // default to plain-text. send()
-    res.type('txt').send('Not found')
-  })
 }
 
 const initRoutes = (ctx) => {
@@ -186,8 +173,9 @@ const start = async (ctx) => {
   )
   initMidlewareBef(apiContext)
   initEngineView(apiContext)
+  registerReqContext(app, apiContext)
+  registerResContext(app)
   initRoutes(apiContext)
-  initMidlewareAft(apiContext)
 
   const port = ctx.config.SERVER_PORT || 3000
   app.listen(port, () => {

@@ -12,4 +12,4 @@ const PatientType = KeyMirror({
   CURED: null,
 })
 
-export {OwnerType}
+module.exports = {PatientType}

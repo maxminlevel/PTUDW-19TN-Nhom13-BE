@@ -69,3 +69,4 @@ staging.json
 
 
 /docker/docker-compose.yml
+/docker/data

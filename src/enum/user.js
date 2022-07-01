@@ -6,4 +6,4 @@ const UserType = KeyMirror({
   MANAGER: null,
 })
 
-export {UserType}
+module.exports = {UserType}

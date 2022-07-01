@@ -1,6 +1,6 @@
 var KeyMirror = require('keymirror')
 
-export const AssetErrorCodes = KeyMirror({
+const AssetErrorCodes = KeyMirror({
   INTERNAL_SERVER_ERROR: null,
   EMAIL_REQUIRED: null,
   ADDRESS_REQUIRED: null,
@@ -35,3 +35,5 @@ export const AssetErrorCodes = KeyMirror({
   LOCATION_ID_INVALID: null,
   LOCATION_NOT_EXISTS: null,
 })
+
+module.exports = {AssetErrorCodes}

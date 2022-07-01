@@ -6,4 +6,4 @@ const WalletStatus = KeyMirror({
   LOCK: null,
 })
 
-export {WalletStatus}
+module.exports = {WalletStatus}

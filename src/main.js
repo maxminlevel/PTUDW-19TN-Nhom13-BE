@@ -1,4 +1,3 @@
-const dotenv = require('dotenv')
 const api = require('./api')
 const db = require('./db')
 const {assignObjOnce} = require('./helpers/object')
