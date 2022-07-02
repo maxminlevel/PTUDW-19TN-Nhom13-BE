@@ -20,7 +20,11 @@ const command = async (query, meta = false) => {
     console.log(
       '-----------------------------Press Ctrl+C to cancel!!!-----------------------------'
     )
-    for (let i = ctx.config.CANCEL_TIME; i >= 0; --i) {
+    for (
+      let i = ctx.config.CANCEL_TIME || process.env.CANCEL_TIME;
+      i >= 0;
+      --i
+    ) {
       console.log('Seed database in', i.toString(), 's')
       await wait(1200)
     }

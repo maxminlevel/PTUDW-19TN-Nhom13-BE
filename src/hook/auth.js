@@ -10,7 +10,10 @@ const _ = require('lodash')
 const authUser = async (req, res, next) => {
   try {
     const authToken = req.headers.authorization
-    const decoded = await verify(authToken, req.ctx.config.JWT_CODE)
+    const decoded = await verify(
+      authToken,
+      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+    )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (_.isEmpty(user)) {
       throw new ClientError({users: 'Not found'}).withCodes(
@@ -27,7 +30,10 @@ const authUser = async (req, res, next) => {
 const authCustomer = async (req, res, next) => {
   try {
     const authToken = req.headers.authorization
-    const decoded = await verify(authToken, req.ctx.config.JWT_CODE)
+    const decoded = await verify(
+      authToken,
+      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+    )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (user.Type != UserType.CUSTOMER) {
       throw new ClientError({users: 'Not customer'}).withCodes(
@@ -55,7 +61,10 @@ const verify = async (token, secrets) => {
 const authAdmin = async (req, res, next) => {
   try {
     const authToken = req.headers.authorization
-    const decoded = await verify(authToken, req.ctx.config.JWT_CODE)
+    const decoded = await verify(
+      authToken,
+      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+    )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (user.Type != UserType.ADMIN) {
       throw new ClientError({users: 'Not admin'}).withCodes(
@@ -72,7 +81,10 @@ const authAdmin = async (req, res, next) => {
 const authManager = async (req, res, next) => {
   try {
     const authToken = req.headers.authorization
-    const decoded = await verify(authToken, req.ctx.config.JWT_CODE)
+    const decoded = await verify(
+      authToken,
+      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+    )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (user.Type != UserType.MANAGER) {
       throw new ClientError({users: 'Not Manager'}).withCodes(

@@ -23,7 +23,7 @@ const {
 const initMidlewareBef = (ctx) => {
   const {app} = ctx
   const whitelist =
-    '127.0.0.1' && ctx.config.ACCESS_CONTROL_ALLOW_ORIGIN.split(',')
+    '127.0.0.1' && process.env.ACCESS_CONTROL_ALLOW_ORIGIN.split(',')
   const corsOptions = {
     origin: function (origin, callback) {
       if (!origin) callback(null, true)
@@ -177,7 +177,7 @@ const start = async (ctx) => {
   registerResContext(app)
   initRoutes(apiContext)
 
-  const port = ctx.config.SERVER_PORT || 3000
+  const port = process.env.PORT || 3000
   app.listen(port, () => {
     console.log(`App running on http://localhost:${port}`)
   })
