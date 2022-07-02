@@ -1,4 +1,4 @@
-const {assignObjOnce} = require('../helpers/object')
+const {assignObjOnce} = require('@/helpers/object')
 
 const init = (rawConfig = {}) => {
   return assignObjOnce(

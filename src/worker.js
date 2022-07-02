@@ -2,7 +2,7 @@ const {glob} = require('glob')
 const _ = require('lodash')
 const path = require('path')
 var cron = require('node-cron')
-const {assignObjOnce} = require('./helpers/object')
+const {assignObjOnce} = require('@/helpers/object')
 
 const start = async (ctx) => {
   assignObjOnce(ctx.instances, {cron})

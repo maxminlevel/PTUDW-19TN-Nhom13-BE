@@ -1,11 +1,11 @@
-const dotenv = require('dotenv')
-const api = require('./api')
-const db = require('./db')
-const {assignObjOnce} = require('./helpers/object')
+require('module-alias/register')
+const api = require('@/api')
+const db = require('@/db')
+const {assignObjOnce} = require('@/helpers/object')
 const util = require('util')
-const config = require('./config')
-const worker = require('./worker')
-const sandbox = require('./sandbox')
+const config = require('@/config')
+const worker = require('@/worker')
+const sandbox = require('@/sandbox')
 
 const startApp = async () => {
   const ctx = config.init()
@@ -38,7 +38,7 @@ const startApp = async () => {
   await api.start(ctx)
 
   await worker.start(ctx)
-  await sandbox.start(ctx)
+  
 }
 
 startApp()
