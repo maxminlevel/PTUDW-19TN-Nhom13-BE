@@ -7,6 +7,7 @@
   },
   "scripts": {
     "start": "nodemon src/main.js",
+    "debug": "nodemon --inspect src/main.js",
     "clean": "rimraf ./dist",
     "build": "npm run clean && babel src -d dist --copy-files",
     "test": "jest --config jest.config.json",
