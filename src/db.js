@@ -22,9 +22,23 @@ const initSchemas = async (ctx) => {
 
 const init = async (ctx) => {
   const {config, instances} = ctx
-  const sequelize = new Sequelize(process.env.POSTGRES_URI, {
-    logging: false,
-  })
+  let options = undefined
+  if (process.env.NODE_ENV == 'production') {
+    options = {
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
+      logging: false,
+    }
+  } else {
+    options = {
+      logging: false,
+    }
+  }
+  const sequelize = new Sequelize(process.env.POSTGRES_URI, options)
   const dbContext = assignObjOnce(
     {},
     {
