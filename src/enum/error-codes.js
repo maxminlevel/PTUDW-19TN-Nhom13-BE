@@ -47,6 +47,9 @@ const AssetErrorCodes = KeyMirror({
   PACKPRODUCT_IDS_INVALID: null,
 
   PERMISSION_ADMIN_INVALID: null,
+  PERMISSION_MANAGER_INVALID: null,
+  PERMISSION_USER_INVALID: null,
+  TOKEN_VERIFY_FAILED: null,
 })
 
 module.exports = {AssetErrorCodes}
