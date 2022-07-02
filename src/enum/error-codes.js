@@ -26,6 +26,7 @@ const AssetErrorCodes = KeyMirror({
   PRODUCT_URL_REQUIRED: null,
   PRODUCT_URL_FORBIDEN: null,
 
+  USER_NOT_FOUND: null,
   PACK_ID_REQUIRED: null,
   PACK_ID_INVALID: null,
   PACK_ID_NOT_EXISTS: null,
@@ -34,6 +35,16 @@ const AssetErrorCodes = KeyMirror({
   LOCATION_ID_REQUIRED: null,
   LOCATION_ID_INVALID: null,
   LOCATION_NOT_EXISTS: null,
+
+  PRODUCTCATEGORY_ID_INVALID: null,
+  PRODUCTCATEGORY_ID_REQUIRED: null,
+  
+  RECEIPT_ID_INVALID: null,
+  RECEIPT_ID_REQUIRED: null,
+
+  RECEIPTDETAIL_ID_INVALID: null,
+
+  PACKPRODUCT_IDS_INVALID: null,
 
   PERMISSION_ADMIN_INVALID: null,
 })

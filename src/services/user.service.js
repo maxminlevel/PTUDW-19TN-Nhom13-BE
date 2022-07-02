@@ -30,11 +30,11 @@ const create = async (ctx, body) => {
   })
 }
 const update = async (ctx, userId, body) => {
-  const result = await UserDAO.updateOne(ctx, userId)
+  const result = await UserDAO.updateOne(ctx, userId, body)
   return result
 }
-const remove = async (ctx, userId) => {
-  const result = await UserDAO.deleteOne(ctx, userId)
+const remove = async (ctx, userId, body) => {
+  const result = await UserDAO.deleteOne(ctx, userId, body)
   return result
 }
 
