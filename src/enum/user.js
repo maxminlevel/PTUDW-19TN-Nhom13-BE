@@ -6,4 +6,9 @@ const UserType = KeyMirror({
   MANAGER: null,
 })
 
-module.exports = {UserType}
+const UserStatus = KeyMirror({
+  LOCK: null,
+  UNLOCK: null,
+})
+
+module.exports = {UserType, UserStatus}

@@ -21,6 +21,8 @@
     "setup": "bash scripts/setup.sh",
     "docker:setup": "export $(cat .env); envsubst < ./docker/template.yml > ./docker/docker-compose.yml",
     "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:reset": "sudo rm -rf docker/data",
     "docker:image": "sh ./scripts/docker-image.sh",
     "env:hide": "sh ./scripts/env-hide.sh"
   },

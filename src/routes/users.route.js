@@ -5,13 +5,11 @@ const midleware = require('@/hook/middleware')
 
 // List all user in admin view
 router.get('/', authAdmin, midleware.page.request, async (req, res, next) => {
-  console.log('first')
   try {
-    res.success(await UserService.list(req.ctx), {
+    res.success(await UserService.list(req.ctx, req.ctx.get('data')), {
       metadata: req.ctx.get('data.paging'),
     })
   } catch (e) {
-    console.log(e)
     res.fail(400, error.detail, error.statusCode)
   }
   next()
@@ -21,8 +19,7 @@ router.get('/', authAdmin, midleware.page.request, async (req, res, next) => {
 // Get detail in user profile
 router.get('/:id', authUser, async (req, res, next) => {
   try {
-    const id = req.params.id
-    res.success(await UserService.getUser(req.ctx, id))
+    res.success(await UserService.getUser(req.ctx, {id: req.params.id}))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
@@ -34,7 +31,6 @@ router.post('/', authAdmin, async (req, res, next) => {
   try {
     res.success(await UserService.create(req.ctx, req.body))
   } catch (error) {
-    console.log(error)
     res.fail(400, error.detail, error.statusCode)
   }
   next()
@@ -43,8 +39,8 @@ router.post('/', authAdmin, async (req, res, next) => {
 // Modify user in admin view
 router.put('/:id', authUser, async (req, res, next) => {
   try {
-    const id = req.params.id
-    res.success(await UserService.update(req.ctx, id, req.body))
+    const userId = req.params.id
+    res.success(await UserService.update(req.ctx, userId, req.body))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
@@ -54,8 +50,8 @@ router.put('/:id', authUser, async (req, res, next) => {
 // Soft delete user
 router.delete('/:id', authAdmin, async (req, res, next) => {
   try {
-    const id = req.ctx.get('data.id')
-    res.success(await UserService.remove(req.ctx, id))
+    const userId = req.params.id
+    res.success(await UserService.remove(req.ctx, userId))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
@@ -63,11 +59,10 @@ router.delete('/:id', authAdmin, async (req, res, next) => {
 })
 
 // Lock user with id
-router.post('/lock:id', authAdmin, async (req, res, next) => {
+router.get('/:id/lock', authAdmin, async (req, res, next) => {
   try {
-    const id = req.ctx.get('data.id')
-    const body = req.body
-    res.success(await UserService.update(req.ctx, id, body))
+    const userId = req.params.id
+    res.success(await UserService.lock(req.ctx, userId))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
@@ -75,11 +70,10 @@ router.post('/lock:id', authAdmin, async (req, res, next) => {
 })
 
 // Unlock user with id
-router.post('/unlock:id', authAdmin, async (req, res, next) => {
+router.get('/:id/unlock', authAdmin, async (req, res, next) => {
   try {
-    const id = req.ctx.get('data.id')
-    const body = req.body
-    res.success(await UserService.update(req.ctx, id, body))
+    const userId = req.params.id
+    res.success(await UserService.unlock(req.ctx, userId))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
