@@ -4,14 +4,14 @@ const start = async (ctx) => {
   const {
     instances: {
       sequelize: {
-        models: {Test},
-      },
-    },
+        models: {User}
+      }
+    }
   } = ctx
-  await Test.create({firstName: 'Jane', lastName: 'Doe'})
-  await Test.create({firstName: 'Jane', lastName: 'Doe'})
-  await Test.create({firstName: 'Jane', lastName: 'Doe'})
-  await Test.create({firstName: 'Jane', lastName: 'Doe'})
+  await User.create({firstName: 'Jane', lastName: 'Doe'})
+  await User.create({firstName: 'Jane', lastName: 'Doe'})
+  await User.create({firstName: 'Jane', lastName: 'Doe'})
+  await User.create({firstName: 'Jane', lastName: 'Doe'})
 }
 
 module.exports = {
