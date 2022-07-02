@@ -6,7 +6,8 @@
     "@": "./src"
   },
   "scripts": {
-    "start": "nodemon src/main.js",
+    "dev": "nodemon src/main.js",
+    "start": "npm run build && nodemon dist/main.js",
     "debug": "nodemon --inspect src/main.js",
     "clean": "rimraf ./dist",
     "build": "npm run clean && babel src -d dist --copy-files",
@@ -54,5 +55,10 @@
     "sequelize": "^6.20.1",
     "winston": "^3.7.2",
     "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.6",
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6"
   }
 }
