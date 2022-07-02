@@ -27,11 +27,15 @@ const findOne = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  const result = await models.User.findAll({
+  const results = await models.User.findAll({
     raw: true,
     ...body,
+    limit: 1,
   })
-  return result
+  if (results.length == 0) {
+    return null
+  }
+  return results[0]
 }
 const insertOne = async (ctx, body) => {
   const {
