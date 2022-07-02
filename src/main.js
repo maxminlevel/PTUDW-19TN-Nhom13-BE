@@ -38,7 +38,7 @@ const startApp = async () => {
   await api.start(ctx)
 
   await worker.start(ctx)
-  //await sandbox.start(ctx)
+  
 }
 
 startApp()

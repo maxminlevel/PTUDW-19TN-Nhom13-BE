@@ -50,7 +50,7 @@ const start = async (ctx) => {
   const {
     instances: {sequelize},
   } = ctx
-  // await sequelize.sync({force: true}) // When reset database only turn on comment
+  await sequelize.sync({force: true}) // When reset database only turn on comment
   // await sequelize.sync({alter: true}) // When reconstruct database only turn on this comment
   // When no need to update database diagram, turn off both
   return {sequelize}

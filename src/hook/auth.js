@@ -8,6 +8,7 @@ const {ClientError} = require('@/helpers/error')
 
 const authUser = async (req, res, next) => {
   const authToken = req.headers.authorization
+  console.log(authToken)
   var decoded = jwt.verify(authToken, req.ctx.config.JWT_CODE)
 
   const user = await UserService.getUser(req.ctx, decoded.id)
