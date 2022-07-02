@@ -70,3 +70,7 @@ staging.json
 
 /docker/docker-compose.yml
 /docker/data
+
+# vscode
+.vscode
+launch.js
