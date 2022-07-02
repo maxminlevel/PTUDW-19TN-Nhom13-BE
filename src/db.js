@@ -22,12 +22,9 @@ const initSchemas = async (ctx) => {
 
 const init = async (ctx) => {
   const {config, instances} = ctx
-  const sequelize = new Sequelize(
-    config.POSTGRES_URI || process.env.POSTGRES_URI,
-    {
-      logging: false,
-    }
-  )
+  const sequelize = new Sequelize(process.env.POSTGRES_URI, {
+    logging: false,
+  })
   const dbContext = assignObjOnce(
     {},
     {

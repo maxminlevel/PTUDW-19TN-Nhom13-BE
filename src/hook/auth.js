@@ -12,7 +12,7 @@ const authUser = async (req, res, next) => {
     const authToken = req.headers.authorization
     const decoded = await verify(
       authToken,
-      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+      process.env.JWT_CODE || req.ctx.config.JWT_CODE
     )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (_.isEmpty(user)) {
@@ -32,7 +32,7 @@ const authCustomer = async (req, res, next) => {
     const authToken = req.headers.authorization
     const decoded = await verify(
       authToken,
-      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+      process.env.JWT_CODE || req.ctx.config.JWT_CODE
     )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (user.Type != UserType.CUSTOMER) {
@@ -63,7 +63,7 @@ const authAdmin = async (req, res, next) => {
     const authToken = req.headers.authorization
     const decoded = await verify(
       authToken,
-      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+      process.env.JWT_CODE || req.ctx.config.JWT_CODE
     )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (user.Type != UserType.ADMIN) {
@@ -83,7 +83,7 @@ const authManager = async (req, res, next) => {
     const authToken = req.headers.authorization
     const decoded = await verify(
       authToken,
-      req.ctx.config.JWT_CODE || process.env.JWT_CODE
+      process.env.JWT_CODE || req.ctx.config.JWT_CODE
     )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
     if (user.Type != UserType.MANAGER) {
