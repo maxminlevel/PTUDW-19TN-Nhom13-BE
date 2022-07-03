@@ -75,7 +75,7 @@ const authManager = async (req, res, next) => {
     const authToken = req.headers.authorization
     const decoded = await verify(authToken, req.ctx.config.JWT_CODE)
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
-    if (user.Type != UserType.MANAGER) {
+    if (user.Type != UserType.MANAGER && user.Type != UserType.ADMIN) {
       throw new ClientError({users: 'Not Manager'}).withCodes(
         AssetErrorCodes.PERMISSION_MANAGER_INVALID
       )
