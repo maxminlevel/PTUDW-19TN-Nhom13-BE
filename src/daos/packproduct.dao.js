@@ -24,6 +24,41 @@ const findAll = async (ctx) => {
     })
     return result
   }
+
+  const findPack = async (ctx, PackId) => {
+    const {
+      instances: {
+        sequelize: {models},
+      },
+    } = ctx
+    const result = await models.PackProduct.findAll({
+      where: {
+        PackId
+      },
+      raw: true,
+      limit: 1,
+      attributes: ['ProductId', 'PackId', 'Limit'],
+    })
+    return result
+  }
+
+  const findProduct = async (ctx, PackId) => {
+    const {
+      instances: {
+        sequelize: {models},
+      },
+    } = ctx
+    const result = await models.PackProduct.findAll({
+      where: {
+        ProductId
+      },
+      raw: true,
+      limit: 1,
+      attributes: ['ProductId', 'PackId', 'Limit'],
+    })
+    return result
+  }
+
   const insertOne = async (ctx, data) => {
     const {
       instances: {
@@ -68,5 +103,7 @@ const findAll = async (ctx) => {
     insertOne,
     updateOne,
     deleteOne,
+    findPack,
+    findProduct,
   }
   
