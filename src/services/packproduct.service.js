@@ -16,6 +16,28 @@ const getPackProduct = async (ctx, ProductId, PackId) => {
   }
   return results[0]
 }
+
+const getPack = async (ctx, PackId) => {
+  const results = await PackProductDao.findPack(ctx, PackId)
+  if (results.length == 0) {
+    throw new ClientError({packproduct: 'Not found'}).withCodes(
+      AssetErrorCodes.PACKPRODUCT_IDS_INVALID
+    )
+  }
+  return results[0]
+}
+
+const getProduct = async (ctx, ProductId) => {
+  const results = await PackProductDao.findProduct(ctx, ProductId)
+  if (results.length == 0) {
+    throw new ClientError({packproduct: 'Not found'}).withCodes(
+      AssetErrorCodes.PACKPRODUCT_IDS_INVALID
+    )
+  }
+  return results[0]
+}
+
+
 const create = async (ctx, body) => {
   bcrypt.genSalt(10, function (err, salt) {
     bcrypt.hash(body.password, salt, async function (err, hash) {
@@ -42,4 +64,6 @@ module.exports = {
   create,
   update,
   remove,
+  getPack,
+  getProduct,
 }
