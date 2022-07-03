@@ -39,6 +39,7 @@ const init = async (ctx) => {
     }
   }
   const sequelize = new Sequelize(process.env.POSTGRES_URI, options)
+  console.log(process.env.POSTGRES_URI)
   const dbContext = assignObjOnce(
     {},
     {
