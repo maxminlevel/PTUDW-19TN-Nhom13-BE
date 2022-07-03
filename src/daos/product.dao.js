@@ -29,6 +29,33 @@ const find = async (ctx, ids) => {
     attributes: ['id', 'Name', 'Images', 'Price', 'Unit'],
   })
 }
+
+const findUsedByTime = async (ctx, productId, timeStart, timeStop) => {
+  const {
+    instances: {
+      sequelize: { models },
+    },
+  } = ctx
+  const result = await models.Product.findAll({
+    where: { 
+      [Op.and]: [
+        {
+          createdAt: {
+            [Op.gte]: timeStart,
+          },
+          createdAt: {
+            [Op.lte]: timeStop,
+          },
+          ProductId: productId,
+        },
+      ]
+     },
+    raw: true,
+    attributes: ['id', 'Name', 'Images', 'Price', 'Unit'],
+  })
+  return result
+}
+
 const findOne = async (ctx, id) => {
   const {
     instances: {
@@ -86,4 +113,5 @@ module.exports = {
   updateOne,
   deleteOne,
   find,
+  findUsedByTime,
 }

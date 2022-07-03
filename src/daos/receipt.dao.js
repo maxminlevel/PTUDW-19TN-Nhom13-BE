@@ -10,6 +10,36 @@ const findAll = async (ctx) => {
   })
 }
 
+const sumPaymentByTime = async (ctx, timeStart, timeStop) => {
+  const {
+    instances: {
+      sequelize: { models },
+    },
+  } = ctx
+  const result = await models.Receipt.findAll({
+    where: { 
+      [Op.and]: [
+        {
+          createdAt: {
+            [Op.gte]: timeStart,
+          },
+          createdAt: {
+            [Op.lte]: timeStop,
+          },
+        },
+      ]
+     },
+    raw: true,
+    attributes: ['PriceTotal'],
+  })
+
+  let sum = 0
+  result.forEach(item => {
+    sum += item.PriceTotal
+  })
+  return sum
+}
+
 const findByUserId = async (ctx, id) => {
   const {
     instances: {
