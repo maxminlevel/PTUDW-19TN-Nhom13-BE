@@ -16,6 +16,16 @@ const getReceipt = async (ctx, id) => {
   }
   return results[0]
 }
+
+const getReceiptByUser = async (ctx, uid) => {
+  const results = await ReceiptDao.findByUserId(ctx, uid)
+  if (results.length != 1) {
+    throw new ClientError({receipt: 'Not found'}).withCodes(
+      AssetErrorCodes.RECEIPT_ID_INVALID
+    )
+  }
+  return results[0]
+}
 const create = async (ctx, body) => {
     await ReceiptDao.insertOne(ctx, {
         Time: body.name,
@@ -40,4 +50,5 @@ module.exports = {
   create,
   update,
   remove,
+  getReceiptByUser,
 }
