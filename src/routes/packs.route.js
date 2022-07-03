@@ -26,7 +26,6 @@ router.post('/', authAdmin, async (req, res, next) => {
   try {
     res.success(await PackService.create(req.ctx, req.body))
   } catch (error) {
-    console.log(error)
     res.fail(400, error.detail, error.statusCode)
   }
   next()
