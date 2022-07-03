@@ -104,11 +104,13 @@ const fillSampleData = async (ctx) => {
     name: 'product1',
     images: ['imagelink1'],
     price: 1000,
+    unit: 'piece',
   })
   await productService.create(ctx, {
     name: 'product2',
     images: ['imagelink2'],
     price: 1000,
+    unit: 'piece',
   })
 
   const packProductService = require('./services/packproduct.service')

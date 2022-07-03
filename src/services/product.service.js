@@ -21,6 +21,7 @@ const create = async (ctx, body) => {
         Name: body.name,
         Images: body.images,
         Price: body.price,
+        Unit: body.unit,
       }
     )
 }
