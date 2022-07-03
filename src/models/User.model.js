@@ -7,6 +7,7 @@ const init = (sequelize) => {
       Username: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       Password: {
         type: DataTypes.STRING,

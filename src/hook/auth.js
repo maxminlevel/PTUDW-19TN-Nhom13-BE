@@ -47,9 +47,9 @@ const authCustomer = async (req, res, next) => {
   }
 }
 
-const verify = async (token, secrets) => {
+const verify = async (token, secrets, options) => {
   try {
-    var decoded = jwt.verify(token, secrets)
+    var decoded = jwt.verify(token, secrets, options)
     return decoded
   } catch (error) {
     throw new ClientError({token: 'Verify failed'}).withCodes(
@@ -86,7 +86,7 @@ const authManager = async (req, res, next) => {
       process.env.JWT_CODE || req.ctx.config.JWT_CODE
     )
     const user = await UserService.getUser(req.ctx, {id: decoded.id})
-    if (user.Type != UserType.MANAGER) {
+    if (user.Type != UserType.MANAGER && user.Type != UserType.ADMIN) {
       throw new ClientError({users: 'Not Manager'}).withCodes(
         AssetErrorCodes.PERMISSION_MANAGER_INVALID
       )
@@ -98,4 +98,4 @@ const authManager = async (req, res, next) => {
   }
 }
 
-module.exports = {authUser, authAdmin, authManager, authCustomer}
+module.exports = {authUser, authAdmin, authManager, authCustomer, verify}

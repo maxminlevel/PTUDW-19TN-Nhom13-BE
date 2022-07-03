@@ -17,7 +17,9 @@ router.get('/:productId&:packId', authUser, async (req, res, next) => {
   try {
     const productId = req.params.productId
     const packId = req.params.packId
-    res.success(await PackProductService.getPackProduct(req.ctx, productId, packId))
+    res.success(
+      await PackProductService.getPackProduct(req.ctx, productId, packId)
+    )
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
@@ -55,7 +57,6 @@ router.post('/', authAdmin, async (req, res, next) => {
   try {
     res.success(await PackProductService.create(req.ctx, req.body))
   } catch (error) {
-    console.log(error)
     res.fail(400, error.detail, error.statusCode)
   }
   next()
@@ -64,7 +65,9 @@ router.put('/:productId&:packId', authUser, async (req, res, next) => {
   try {
     const productId = req.params.productId
     const packId = req.params.packId
-    res.success(await PackProductService.update(req.ctx, productId, packId, req.body))
+    res.success(
+      await PackProductService.update(req.ctx, productId, packId, req.body)
+    )
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
@@ -80,6 +83,5 @@ router.delete('/:productId&:packId', authAdmin, async (req, res, next) => {
   }
   next()
 })
-
 
 module.exports = router

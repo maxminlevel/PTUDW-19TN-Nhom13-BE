@@ -41,7 +41,6 @@ const getProduct = async (ctx, ProductId) => {
 const create = async (ctx, body) => {
   bcrypt.genSalt(10, function (err, salt) {
     bcrypt.hash(body.password, salt, async function (err, hash) {
-      console.log(err, hash)
       await PackProductDao.insertOne(ctx, {
         ProductId: body.productId,
         PackId: body.packId,

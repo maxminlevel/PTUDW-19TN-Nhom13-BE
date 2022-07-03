@@ -4,6 +4,7 @@ const {ClientError} = require('@/helpers/error')
 const {AssetErrorCodes} = require('@/enum/error-codes')
 const bcrypt = require('bcrypt')
 const _ = require('lodash')
+const jwt = require('jsonwebtoken')
 const {UserStatus} = require('@/enum/user')
 
 const list = async (ctx, body) => {
@@ -22,17 +23,16 @@ const list = async (ctx, body) => {
   return results
 }
 const getUser = async (ctx, body) => {
-  const results = await UserDAO.findOne(ctx, {
+  const result = await UserDAO.findOne(ctx, {
     where: {id: body.id},
-    limit: 1,
     attributes: ['id', 'Username', 'Status', 'Type'],
   })
-  if (results.length != 1) {
+  if (!result) {
     throw new ClientError({users: 'Not found'}).withCodes(
       AssetErrorCodes.USER_NOT_FOUND
     )
   }
-  return results[0]
+  return result
 }
 const create = async (ctx, body) => {
   bcrypt.genSalt(10, function (err, salt) {
@@ -75,6 +75,31 @@ const remove = async (ctx, userId) => {
   return result
 }
 
+const sign = async (payload, secrets, options) => {
+  return jwt.sign(payload, secrets, options)
+}
+
+const getAuthToken = async (ctx, body) => {
+  const user = await UserDAO.findOne(ctx, {where: {Username: body.username}})
+  if (_.isEmpty(user)) {
+    throw new ClientError({users: 'Not found'}, AssetErrorCodes.USER_NOT_FOUND)
+  }
+  if (!bcrypt.compareSync(body.password, user.Password)) {
+    throw new ClientError(
+      {users: 'Login failed'},
+      AssetErrorCodes.USER_NOT_FOUND
+    )
+  }
+  const token = await sign(
+    {
+      id: user.id,
+      ttl: ctx.config.JWT_EXPIRES,
+    },
+    ctx.config.JWT_CODE
+  )
+  return {token}
+}
+
 module.exports = {
   list,
   getUser,
@@ -83,4 +108,5 @@ module.exports = {
   remove,
   lock,
   unlock,
+  login: getAuthToken,
 }

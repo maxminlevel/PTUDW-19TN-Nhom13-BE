@@ -26,7 +26,6 @@ router.post('/', authAdmin, async (req, res, next) => {
   try {
     res.success(await ReceiptService.create(req.ctx, req.body))
   } catch (error) {
-    console.log(error)
     res.fail(400, error.detail, error.statusCode)
   }
   next()
@@ -49,6 +48,5 @@ router.delete('/:id', authAdmin, async (req, res, next) => {
   }
   next()
 })
-
 
 module.exports = router

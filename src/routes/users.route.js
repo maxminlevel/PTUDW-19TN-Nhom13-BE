@@ -80,4 +80,14 @@ router.get('/:id/unlock', authAdmin, async (req, res, next) => {
   next()
 })
 
+// Login return token
+router.post('/login', async (req, res, next) => {
+  try {
+    res.success(await UserService.login(req.ctx, req.body))
+    next()
+  } catch (error) {
+    res.fail(400, error.detail, error.statusCode)
+  }
+})
+
 module.exports = router
