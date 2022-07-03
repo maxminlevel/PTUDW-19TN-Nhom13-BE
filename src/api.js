@@ -80,7 +80,7 @@ const initRoutes = (ctx) => {
   }
   constructAPI(
     [...orderedPriorityRouters, ...routers],
-    '/api/' + config.API_VERSION
+    '/api/' + process.env.API_VERSION
   )
   constructAPI([...view], '', /(^index$)|(\.view$)/)
 }
