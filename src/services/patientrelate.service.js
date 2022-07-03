@@ -3,6 +3,7 @@ const PatientRelateDAO = require('@/daos/patientrelate.dao')
 const {ClientError} = require('@/helpers/error')
 const {AssetErrorCodes} = require('@/enum/error-codes')
 const _ = require('lodash')
+const PatientService = require('@/services/patient.service')
 
 const list = async (ctx, body) => {
   const {paging} = body
@@ -11,7 +12,7 @@ const list = async (ctx, body) => {
   const results = await PatientRelateDAO.findAll(ctx, {
     offset: paging.offset,
     limit: paging.limit,
-    attributes,
+    // attributes,
   })
   paging.found = results.length
   paging.pages = parseInt(
@@ -52,6 +53,31 @@ const update = async (ctx, id, data) => {
 const remove = async (ctx, id) => {
   const result = await PatientRelateDAO.deleteOne(ctx, {where: {id: id}})
   return result
+}
+
+const getDetailRelate = async (ctx, patientSourceId, body) => {
+  const TargetPatients = await PatientRelateDAO.findAll(ctx, {
+    where: {
+      SourceId: patientSourceId,
+    },
+    attributes: ['TargetId'],
+  })
+  const results = _.reduce(
+    TargetPatients,
+    async (results, TargetPatient) => {
+      const patient = await PatientService.get(ctx, {
+        id: TargetPatient.TargetId,
+      })
+      if (_.isEmpty(patient)) {
+        throw new ClientError('Patient related not found').withCodes(
+          AssetErrorCodes.INTERNAL_SERVER_ERROR
+        )
+      }
+      results.push(patient)
+    },
+    []
+  )
+  return results
 }
 
 module.exports = {

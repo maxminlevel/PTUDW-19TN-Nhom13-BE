@@ -7,7 +7,7 @@ const _ = require('lodash')
 const list = async (ctx, body) => {
   const {paging} = body
   paging.offset = _.max([paging.limit * (paging.page - 1), 0])
-  let attributes = ['id']
+  let attributes = ['id', 'Money', 'Debt', 'Type']
   const results = await WalletDAO.findAll(ctx, {
     offset: paging.offset,
     limit: paging.limit,
@@ -22,7 +22,7 @@ const list = async (ctx, body) => {
 const get = async (ctx, body) => {
   const result = await WalletDAO.findOne(ctx, {
     where: {id: body.id},
-    attributes: ['id'],
+    attributes: ['id', 'Money', 'Debt', 'Type'],
   })
   if (!result) {
     throw new ClientError('Error').withCodes(

@@ -18,9 +18,7 @@ router.get('/', authAdmin, midleware.page.request, async (req, res, next) => {
 // Get detail
 router.get('/:id', authAdmin, async (req, res, next) => {
   try {
-    res.success(
-      await ActionHistoryService.getUser(req.ctx, {id: req.params.id})
-    )
+    res.success(await ActionHistoryService.get(req.ctx, {id: req.params.id}))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }

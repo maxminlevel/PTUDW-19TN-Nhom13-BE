@@ -7,7 +7,7 @@ const _ = require('lodash')
 const list = async (ctx, body) => {
   const {paging} = body
   paging.offset = _.max([paging.limit * (paging.page - 1), 0])
-  let attributes = ['id']
+  let attributes = ['id', 'Name', 'Address', 'LoadSize', 'Status']
   const results = await LocationDAO.findAll(ctx, {
     offset: paging.offset,
     limit: paging.limit,
@@ -22,7 +22,7 @@ const list = async (ctx, body) => {
 const get = async (ctx, body) => {
   const result = await LocationDAO.findOne(ctx, {
     where: {id: body.id},
-    attributes: ['id'],
+    attributes: ['id', 'Name', 'Address', 'LoadSize', 'Status'],
   })
   if (!result) {
     throw new ClientError('Error').withCodes(

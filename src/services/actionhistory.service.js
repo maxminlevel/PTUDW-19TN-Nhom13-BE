@@ -7,7 +7,7 @@ const _ = require('lodash')
 const list = async (ctx, body) => {
   const {paging} = body
   paging.offset = _.max([paging.limit * (paging.page - 1), 0])
-  let attributes = ['id']
+  let attributes = ['id', 'Time', 'Action', 'Description']
   const results = await ActionHistoryDAO.findAll(ctx, {
     offset: paging.offset,
     limit: paging.limit,
@@ -19,15 +19,13 @@ const list = async (ctx, body) => {
   )
   return results
 }
-const getUser = async (ctx, body) => {
+const get = async (ctx, body) => {
   const result = await ActionHistoryDAO.findOne(ctx, {
     where: {id: body.id},
-    attributes: ['id'],
+    attributes: ['id', 'Time', 'Action', 'Description'],
   })
   if (!result) {
-    throw new ClientError({users: 'Not found'}).withCodes(
-      AssetErrorCodes.USER_NOT_FOUND
-    )
+    throw new ClientError('Error').withCodes(AssetErrorCodes.USER_NOT_FOUND)
   }
   return result
 }
@@ -56,7 +54,7 @@ const remove = async (ctx, id) => {
 
 module.exports = {
   list,
-  getUser,
+  get,
   create,
   update,
   remove,
