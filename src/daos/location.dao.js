@@ -4,7 +4,7 @@ const countAll = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  return await models.User.count({
+  return await models.Location.count({
     raw: true,
     ...body,
   })
@@ -15,7 +15,7 @@ const findAll = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  const results = await models.User.findAll({
+  const results = await models.Location.findAll({
     raw: true,
     ...body,
   })
@@ -27,7 +27,7 @@ const findOne = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  const results = await models.User.findAll({
+  const results = await models.Location.findAll({
     raw: true,
     ...body,
     limit: 1,
@@ -43,7 +43,7 @@ const insertOne = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  const result = await models.User.create(body.data)
+  const result = await models.Location.create(body.data)
   return result
 }
 const updateOne = async (ctx, body) => {
@@ -52,7 +52,7 @@ const updateOne = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  const result = await models.User.update(body.data, {where: body.where})
+  const result = await models.Location.update(body.data, {where: body.where})
   return result
 }
 const deleteOne = async (ctx, body) => {
@@ -61,7 +61,7 @@ const deleteOne = async (ctx, body) => {
       sequelize: {models},
     },
   } = ctx
-  const result = await models.User.destroy({where: body.where})
+  const result = await models.Location.destroy({where: body.where})
   return result
 }
 

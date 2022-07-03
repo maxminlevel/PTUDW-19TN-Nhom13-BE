@@ -1,11 +1,12 @@
 var router = require('express').Router()
-const ProductService = require('@/services/product.service')
-const {authUser, authAdmin} = require('@/hook/auth')
+const ActionHistoryService = require('@/services/actionhistory.service')
+const {authUser, authAdmin, authManager} = require('@/hook/auth')
 const midleware = require('@/hook/middleware')
 
+// List all
 router.get('/', authAdmin, midleware.page.request, async (req, res, next) => {
   try {
-    res.success(await ProductService.list(req.ctx), {
+    res.success(await ActionHistoryService.list(req.ctx, req.ctx.get('data')), {
       metadata: req.ctx.get('data.paging'),
     })
   } catch (e) {
@@ -13,36 +14,43 @@ router.get('/', authAdmin, midleware.page.request, async (req, res, next) => {
   }
   next()
 })
-router.get('/:id', authUser, async (req, res, next) => {
+
+// Get detail
+router.get('/:id', authAdmin, async (req, res, next) => {
   try {
-    const id = req.params.id
-    res.success(await ProductService.getProduct(req.ctx, id))
+    res.success(await ActionHistoryService.get(req.ctx, {id: req.params.id}))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
   next()
 })
+
+// Add new
 router.post('/', authAdmin, async (req, res, next) => {
   try {
-    res.success(await ProductService.create(req.ctx, req.body))
+    res.success(await ActionHistoryService.create(req.ctx, req.body))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
   next()
 })
+
+// Modify
 router.put('/:id', authUser, async (req, res, next) => {
   try {
-    const id = req.params.id
-    res.success(await ProductService.update(req.ctx, id, req.body))
+    const userId = req.params.id
+    res.success(await ActionHistoryService.update(req.ctx, userId, req.body))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
   next()
 })
+
+// Soft delete
 router.delete('/:id', authAdmin, async (req, res, next) => {
   try {
-    const id = req.ctx.get('data.id')
-    res.success(await ProductService.remove(req.ctx, id))
+    const userId = req.params.id
+    res.success(await ActionHistoryService.remove(req.ctx, userId))
   } catch (error) {
     res.fail(400, error.detail, error.statusCode)
   }
