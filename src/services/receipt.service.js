@@ -28,7 +28,7 @@ const getReceiptByUser = async (ctx, uid) => {
 }
 const create = async (ctx, body) => {
     await ReceiptDao.insertOne(ctx, {
-        Time: body.name,
+        Time: body.time,
         Status: body.status,
         UserId: body.userid,
         PriceTotal: body.pricetotal,

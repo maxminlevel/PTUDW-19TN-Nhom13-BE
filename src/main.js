@@ -5,7 +5,6 @@ const {assignObjOnce} = require('@/helpers/object')
 const util = require('util')
 const config = require('@/config')
 const worker = require('@/worker')
-const sandbox = require('@/sandbox')
 
 const startApp = async () => {
   const ctx = config.init()
