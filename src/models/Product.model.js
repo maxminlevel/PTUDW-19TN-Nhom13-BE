@@ -7,6 +7,7 @@ const init = (sequelize) => {
       Name: {type: DataTypes.STRING},
       Images: {type: DataTypes.ARRAY(DataTypes.STRING)},
       Price: {type: DataTypes.DOUBLE},
+      Unit: {type: DataTypes.STRING}
     },
     {
       paranoid: true,

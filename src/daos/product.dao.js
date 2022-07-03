@@ -8,7 +8,7 @@ const findAll = async (ctx) => {
   } = ctx
   return await models.Product.findAll({
     raw: true,
-    attributes: ['id', 'Name', 'Images', 'Price'],
+    attributes: ['id', 'Name', 'Images', 'Price', 'Unit'],
   })
 }
 
@@ -26,7 +26,7 @@ const find = async (ctx, ids) => {
       }
     },
     raw: true,
-    attributes: ['id', 'Name', 'Images', 'Price'],
+    attributes: ['id', 'Name', 'Images', 'Price', 'Unit'],
   })
 }
 const findOne = async (ctx, id) => {
@@ -39,7 +39,7 @@ const findOne = async (ctx, id) => {
     where: { id },
     raw: true,
     limit: 1,
-    attributes: ['id', 'Name', 'Images', 'Price'],
+    attributes: ['id', 'Name', 'Images', 'Price', 'Unit'],
   })
   return result
 }
