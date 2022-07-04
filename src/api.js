@@ -10,7 +10,7 @@ const bodyParser = require('body-parser')
 const expressHbs = require('express-handlebars')
 const express_handlebars_sections = require('express-handlebars-sections')
 const handlebars = require('handlebars')
-const {assignObjOnce} = require('@/helpers/object')
+const {assignObjOnce} = require('./helpers/object')
 const {
   allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access')
@@ -18,7 +18,7 @@ const i18n = require('i18n')
 const {
   registerReqContext,
   registerResContext,
-} = require('@/helpers/request-handler')
+} = require('./helpers/request-handler')
 
 const initMidlewareBef = (ctx) => {
   const {app} = ctx
@@ -47,15 +47,27 @@ const initMidlewareBef = (ctx) => {
 const initRoutes = (ctx) => {
   const {app, config} = ctx
   const routePath = path.resolve(__dirname, 'routes')
-  const priorityRouters = glob.sync(path.join(routePath, '**/index.js'), {
-    dot: true,
-  })
-  const routers = glob.sync(path.join(routePath, '**/*.route.js'), {
-    dot: true,
-  })
-  const view = glob.sync(path.join(routePath, '**/*.view.js'), {
-    dot: true,
-  })
+  const priorityRouters = glob.sync(
+    path.join(routePath, '/**/index.js').replace(/(\\)/g, '/'),
+    {
+      dot: true,
+    }
+  )
+  const routers = glob.sync(
+    path.join(routePath, '**/*.route.js').replace(/(\\)/g, '/'),
+    {
+      dot: true,
+    }
+  )
+  console.log(path.join(routePath, 'index.js').replace(/(\\)/g, '/'))
+  console.log(priorityRouters)
+  const view = glob.sync(
+    path.join(routePath, '**/*.view.js').replace(/\\/g, '/'),
+    {
+      dot: true,
+    }
+  )
+
   const orderedPriorityRouters = _.sortBy(
     priorityRouters,
     (filePath) => _.split(filePath, '/').length
@@ -64,10 +76,11 @@ const initRoutes = (ctx) => {
     _.each(files, (filePath) => {
       const router = require(filePath)
       const {dir: routerDir, name: routerName} = path.parse(filePath)
-      const subPath = _.replace(routerName, regex, '')
-      const fullPath = path.join(routerDir, subPath)
-      const rootPath = path.join('/', path.relative(routePath, fullPath))
-
+      let subPath = _.replace(routerName, regex, '')
+      let fullPath = path.join(routerDir, subPath).replace(/\\/g, '/')
+      let rootPath = path
+        .join('/', path.relative(routePath, fullPath))
+        .replace(/\\/g, '/')
       _.each(router.stack, (layer) => {
         if (rootPath != '/') {
           console.log(`-> api: ${prefix + rootPath}` + layer.route.path.trim())
@@ -78,10 +91,12 @@ const initRoutes = (ctx) => {
       app.use(prefix + rootPath, router)
     })
   }
-  // constructAPI(
-  //   [...orderedPriorityRouters, ...routers],
-  //   '/api/' + process.env.API_VERSION
-  // )
+
+  constructAPI(
+    [...orderedPriorityRouters, ...routers],
+    '/api/' + process.env.API_VERSION
+  )
+
   constructAPI([...view], '', /(^index$)|(\.view$)/)
 }
 

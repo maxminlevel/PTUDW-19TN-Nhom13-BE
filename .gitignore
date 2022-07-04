@@ -74,3 +74,5 @@ staging.json
 # vscode
 .vscode
 launch.js
+
+env.bat
