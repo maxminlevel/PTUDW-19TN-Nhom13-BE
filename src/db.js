@@ -9,9 +9,13 @@ const userService = require('./services/user.service')
 const initSchemas = async (ctx) => {
   const {sequelize} = ctx
   const modelPath = path.resolve(__dirname, 'models')
-  const models = glob.sync(path.join(modelPath, '**/*.model.js'), {
-    dot: true,
-  })
+  const models = glob.sync(
+    path.join(modelPath, '**/*.model.js').replace(/\\/g, '/'),
+    {
+      dot: true,
+    }
+  )
+
   _.each([...models], (filePath) => {
     const modelFile = require(filePath)
     const {name: modelName} = path.parse(filePath)
@@ -35,12 +39,20 @@ const init = async (ctx) => {
       logging: false,
     }
   } else {
+    // options = {
+    //   logging: false,
+    // }
     options = {
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
       logging: false,
     }
   }
   const sequelize = new Sequelize(process.env.POSTGRES_URI, options)
-  console.log(process.env.POSTGRES_URI)
   const dbContext = assignObjOnce(
     {},
     {
@@ -66,11 +78,11 @@ const start = async (ctx) => {
   const {
     instances: {sequelize},
   } = ctx
-  await sequelize.sync({force: true}) // When reset database only turn on comment
+  //await sequelize.sync({force: true}) // When reset database only turn on comment
   //await sequelize.sync({alter: true}) // When reconstruct database only turn on this comment
   // When no need to update database diagram, turn off both
 
-  await fillSampleData(ctx)
+  //await fillSampleData(ctx)
   return {sequelize}
 }
 
@@ -80,7 +92,11 @@ const fillSampleData = async (ctx) => {
   } = ctx
 
   const userService = require('./services/user.service')
-  await userService.create(ctx, {username: 'user1', password: 'admin', type: 'ADMIN'})
+  await userService.create(ctx, {
+    username: 'user1',
+    password: 'admin',
+    type: 'ADMIN',
+  })
 
   packService = require('./services/pack.service')
   await packService.create(ctx, {
@@ -117,22 +133,21 @@ const fillSampleData = async (ctx) => {
   await packProductService.create(ctx, {
     packid: 1,
     productid: 1,
-    limit: 10
+    limit: 10,
   })
 
   await packProductService.create(ctx, {
     packid: 1,
     productid: 2,
-    limit: 10
+    limit: 10,
   })
 
   await packProductService.create(ctx, {
     packid: 2,
     productid: 1,
-    limit: 10
+    limit: 10,
   })
 }
-
 
 module.exports = {
   init,

@@ -92,10 +92,10 @@ const initRoutes = (ctx) => {
     })
   }
 
-  constructAPI(
-    [...orderedPriorityRouters, ...routers],
-    '/api/' + process.env.API_VERSION
-  )
+  // constructAPI(
+  //   [...orderedPriorityRouters, ...routers],
+  //   '/api/' + process.env.API_VERSION
+  // )
 
   constructAPI([...view], '', /(^index$)|(\.view$)/)
 }

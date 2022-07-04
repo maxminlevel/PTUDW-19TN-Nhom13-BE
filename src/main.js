@@ -1,6 +1,6 @@
 require('module-alias/register')
 const api = require('@/api')
-// const db = require('@/db')
+const db = require('@/db')
 const {assignObjOnce} = require('@/helpers/object')
 const util = require('util')
 const config = require('@/config')
@@ -28,9 +28,9 @@ const startApp = async () => {
     process.exit(1)
   })
 
-  // const {sequelize} = await db.init(ctx)
-  // assignObjOnce(ctx.instances, {sequelize})
-  // await db.start(ctx)
+  const {sequelize} = await db.init(ctx)
+  assignObjOnce(ctx.instances, {sequelize})
+  await db.start(ctx)
 
   const {app} = await api.init(ctx)
   assignObjOnce(ctx.instances, {app})
