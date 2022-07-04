@@ -1,0 +1,141 @@
+{{> c_header}}
+
+{{> c_navbar}}
+
+<main class="main__packs">
+        <h1>Mua theo gói</h1>
+
+        <form>
+          <div class="filter">
+            <div class="dropbox__container">
+              <label for="filter__sort">Sắp xếp</label>
+              <select class="dropbox__inner" name="Sắp xếp" id="filter__sort">
+                <option value="default">Mặc định</option>
+                <option value="nameAZ">Tên từ A đến Z</option>
+                <option value="nameZA">Tên từ Z đến A</option>
+              </select>
+            </div>
+            <div class="dropbox__container">
+              <label for="filter__classify">Phân loại</label>
+              <select
+                class="dropbox__inner"
+                name="Phân loại"
+                id="filter__classify"
+              >
+                <option value="default">Tất cả</option>
+                <option value="day pack">Gói ngày</option>
+                <option value="week pack">Gói tuần</option>
+                <option value="month pack">Gói tháng</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="button__filter">
+                <i class="fa-solid fa-filter"></i>
+                <div>Lọc</div>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="main__content">
+          <div class="pack__list">
+            {{#each packs}}
+            <div class="pack__item">
+              {{!-- <a class="pack__image" tabindex="-1" href="pack.html">
+                <img
+                  src=""
+                />
+              </a> --}}
+              <a class="pack__name" href="pack.html">{{Name}}</a>
+              <div class="pack__type">
+                <div>Còn {{TimeLimit}} ngày</div>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </main>
+
+{{> c_footer}}
+
+<!-- Button payment -->
+    <div class="btn-float payment">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <i class="fa-solid fa-circle icon__status"></i>
+    </div>
+
+    <!-- Dialog payment -->
+    <div id="payment_modal">
+      <div class="payment_modal_container">
+        <h2>Thanh toán</h2>
+        <div class="payment_detail">
+          <div>Số tiền còn nợ</div>
+          <div>500.000đ</div>
+        </div>
+        <div class="divine"></div>
+        <div class="payment_detail">
+          <div>Số dư hiện tại</div>
+          <div>1.000.000đ</div>
+        </div>
+        <div class="payment_detail">
+          <div>Số dư còn lại sau<br />thanh toán</div>
+          <div>500.000đ</div>
+        </div>
+        <div class="button payment__deposit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#FFF"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28c.59-.35 1-.98 1-1.72V9c0-.74-.41-1.37-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"
+            />
+            <circle cx="16" cy="12" r="1.5" />
+          </svg>
+          <div>Nạp thêm vào tài khoản</div>
+        </div>
+        <div class="button payment__payoff">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#FFF"
+          >
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M11 17h2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1h-3v-1h4V8h-2V7h-2v1h-1c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h3v1H9v2h2v1zm9-13H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V6h16v12z"
+            />
+          </svg>
+          <div>Thanh toán dư nợ</div>
+        </div>
+        <div class="button payment__payoff_withAnother">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#FFF"
+          >
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"
+            />
+          </svg>
+          <div>Thanh toán dư nợ với dịch vụ khác</div>
+        </div>
+        <div class="btn__close btn-icon">
+          <i class="fa-solid fa-x"></i>
+        </div>
+      </div>
+    </div>
+
+
+{{#section 'script'}}
+
+<script src='/js/customer/packs.js' defer></script>
+
+{{/section}}

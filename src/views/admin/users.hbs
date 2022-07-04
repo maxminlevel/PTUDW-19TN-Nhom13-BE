@@ -1,0 +1,233 @@
+{{> a_header}}
+
+      <div class="m__container">
+        <div id="m__sidebar">
+          <aside class="m__sidebar">
+            <ul class="list-item">
+              <li class="item active">
+                <i class="fa-solid fa-user-group"></i>
+                <a class="a__sidebar__func" href="/html/admin/users.html"
+                  >User</a
+                >
+              </li>
+              <li class="item">
+                <i class="fa-solid fa-list"></i>
+                <a class="a__sidebar__func" href="/html/admin/location.html"
+                  >Treatment Locations</a
+                >
+              </li>
+              <li class="item">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <a class="a__sidebar__func" href="/html/admin/history.html"
+                  >Activity History</a
+                >
+              </li>
+
+              <li class="item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <a class="a__sidebar__func" href="../../../html/login.html">
+                  Sign out
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
+        <div class="m__content">
+          <div class="m__content__header">
+            <div class="m__title heading-primary">User</div>
+            <div class="m__func">
+              <div class="btn btn--primary" id="new_user_btn">
+                <a>New User</a>
+              </div>
+              <div class="btn btn--primary" id="import_file">Import file</div>
+            </div>
+          </div>
+          <form action="submit" method="post">
+            <ul class="s__filter">
+              <li>
+                <label for="locationID">ID</label>
+                <input type="text" name="locationID" id="locationID" />
+              </li>
+              <li>
+                <label for="location"> Username</label>
+                <input type="text" name="location" id="location" />
+              </li>
+              <li>
+                <label for="detail">Role</label>
+                <input type="text" name="detail" id="detail" />
+              </li>
+              <li>
+                <label for="capacity">Action</label>
+                <input type="text" name="capacity" id="capacity" />
+              </li>
+              <li>
+                <button type="submit" value="submit" class="form__search">
+                  <i
+                    class="fa-solid fa-magnifying-glass"
+                    style="font-size: 40px"
+                  ></i>
+                </button>
+              </li>
+            </ul>
+          </form>
+          <div class="line"></div>
+
+          <table class="s__table">
+            <tr>
+              <th>
+                <span>
+                  ID
+                  <button><i class="fa-solid fa-chevron-down"></i></button>
+                </span>
+              </th>
+              <th>
+                <span>
+                  Username
+                  <button><i class="fa-solid fa-chevron-down"></i></button>
+                </span>
+              </th>
+              <th>
+                <span>
+                  Role
+                  <button><i class="fa-solid fa-chevron-down"></i></button>
+                </span>
+              </th>
+              <th>
+                <span>
+                  Action
+                  <button><i class="fa-solid fa-chevron-down"></i></button>
+                </span>
+              </th>
+              <th>
+                <span>
+                  Password
+                  <button><i class="fa-solid fa-chevron-down"></i></button>
+                </span>
+              </th>
+            </tr>
+            {{#each users}}
+            <tr class="m__location__row">
+              <td>{{id}}</td>
+              <td>{{Username}}</td>
+              <td>{{Type}}</td>
+              <td>
+                {{Status}}
+                {{#if lock}}
+                <span class="lock_user_btn"
+                  ><i class="fa-solid fa-lock"></i
+                ></span>
+                {{else}}
+                <span class="unlock_user_btn"
+                  ><i class="fa-solid fa-lock-open"></i
+                ></span>
+                {{/if}}
+              </td>
+              <td>
+                Reset
+                <span class="reset_password_btn"
+                  ><i class="fa-solid fa-arrow-rotate-left"></i
+                ></span>
+              </td>
+            </tr>
+            {{/each}}
+          </table>
+          <div id="s__paging"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New User box -->
+    <div id="add_user_modal" class="modal">
+      <div class="modal-content">
+        <span class="new_user_btn_close close">&times;</span>
+        <div class="m__title heading-primary u-center-text">New User</div>
+        <form action="submit" method="post">
+          <ul>
+            <li>
+              <label for="location">Username</label>
+              <input type="text" name="location" id="location" />
+            </li>
+            <li>
+              <label for="detail">Password</label>
+              <input type="text" name="detail" id="detail" />
+            </li>
+            <li>
+              <label for="capacity">Confirm password</label>
+              <input type="text" name="capacity" id="capacity" />
+            </li>
+            <li>
+              <label for="current">Role</label>
+              <input type="text" name="current" id="current" />
+            </li>
+          </ul>
+          <div class="modal-content__btn_save btn new_user_btn_close">
+            <p>Save</p>
+          </div>
+          <div class="modal-content__btn_cancel btn new_user_btn_close">
+            <p>Cancel</p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Reset password box -->
+    <div id="reset_password_modal" class="modal">
+      <div class="modal-content">
+        <span class="reset_password_close close">&times;</span>
+        <div class="m__title heading-primary u-center-text">Reset Password</div>
+        <form action="submit" method="post">
+          <ul>
+            <li>
+              <label for="detail">Pass</label>
+              <input type="text" name="detail" id="detail" />
+            </li>
+            <li>
+              <label for="capacity">Confirm pass</label>
+              <input type="text" name="capacity" id="capacity" />
+            </li>
+          </ul>
+          <div class="modal-content__btn_save btn reset_password_close">
+            <p>Save</p>
+          </div>
+          <div class="modal-content__btn_cancel btn reset_password_close">
+            <p>Cancel</p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Lock usser box -->
+    <div id="lock_user_modal" class="modal">
+      <div class="modal-content">
+        <span class="lock_user_close close">&times;</span>
+        <div class="m__title heading-primary u-center-text">
+          Lock this user?
+        </div>
+        <form action="submit" method="post">
+          <div class="modal-content__btn_save btn lock_user_close">
+            <p>YES</p>
+          </div>
+          <div class="modal-content__btn_cancel btn lock_user_close">
+            <p>NO</p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Unlock usser box -->
+    <div id="unlock_user_modal" class="modal">
+      <div class="modal-content">
+        <span class="unlock_user_close close">&times;</span>
+        <div class="m__title heading-primary u-center-text">
+          Unlock this user?
+        </div>
+        <form action="submit" method="post">
+          <div class="modal-content__btn_save btn unlock_user_close">
+            <p>YES</p>
+          </div>
+          <div class="modal-content__btn_cancel btn unlock_user_close">
+            <p>NO</p>
+          </div>
+        </form>
+      </div>
+    </div>
