@@ -1,20 +1,20 @@
-const {Sequelize} = require('sequelize')
-const {applyExtraSetup} = require('@/models/association')
+const { Sequelize } = require('sequelize')
+const { applyExtraSetup } = require('@/models/association')
 const path = require('path')
-const {glob} = require('glob')
+const { glob } = require('glob')
 const _ = require('lodash')
-const {assignObjOnce} = require('@/helpers/object')
+const { assignObjOnce } = require('@/helpers/object')
 const userService = require('./services/user.service')
 
 const initSchemas = async (ctx) => {
-  const {sequelize} = ctx
+  const { sequelize } = ctx
   const modelPath = path.resolve(__dirname, 'models')
   const models = glob.sync(path.join(modelPath, '**/*.model.js'), {
     dot: true,
   })
   _.each([...models], (filePath) => {
     const modelFile = require(filePath)
-    const {name: modelName} = path.parse(filePath)
+    const { name: modelName } = path.parse(filePath)
     const name = _.replace(modelName, /(^index$)|(\.model$)/, '')
     modelFile.init(sequelize)
     console.log(`-> table: ${name}`)
@@ -22,7 +22,7 @@ const initSchemas = async (ctx) => {
 }
 
 const init = async (ctx) => {
-  const {config, instances} = ctx
+  const { config, instances } = ctx
   let options = undefined
   if (process.env.NODE_ENV == 'production') {
     options = {
@@ -59,34 +59,34 @@ const init = async (ctx) => {
   } catch (error) {
     console.error('Unable to connect to the database:', error)
   }
-  return {sequelize}
+  return { sequelize }
 }
 
 const start = async (ctx) => {
   const {
-    instances: {sequelize},
+    instances: { sequelize },
   } = ctx
-  // await sequelize.sync({force: true}) // When reset database only turn on comment
+  //await sequelize.sync({force: true}) // When reset database only turn on comment
   //await sequelize.sync({alter: true}) // When reconstruct database only turn on this comment
   // When no need to update database diagram, turn off both
-  try {
-    await fillSampleData(ctx)
-  }
-  catch (error) {
-    
-  }
-  return {sequelize}
+
+  // when want to update database diagram, comment out the following line
+  // try {
+  //   //await fillSampleData(ctx)
+  // }
+  // catch (error) {
+
+  // }
+  return { sequelize }
 }
 
 const fillSampleData = async (ctx) => {
-  const {
-    instances: {sequelize},
-  } = ctx
 
   const userService = require('./services/user.service')
-  await userService.create(ctx, {username: 'user1', password: 'admin', type: 'ADMIN'})
+  await userService.create(ctx, { username: 'user1', password: 'admin', type: 'ADMIN' })
 
   packService = require('./services/pack.service')
+
   await packService.create(ctx, {
     name: 'pack1',
     limitbyprod: 10,
@@ -103,7 +103,9 @@ const fillSampleData = async (ctx) => {
     receiptdetailid: null,
   })
 
+
   const productService = require('./services/product.service')
+
   await productService.create(ctx, {
     name: 'product1',
     images: ['imagelink1'],
@@ -118,6 +120,7 @@ const fillSampleData = async (ctx) => {
   })
 
   const packProductService = require('./services/packproduct.service')
+
   await packProductService.create(ctx, {
     packid: 1,
     productid: 1,
@@ -129,7 +132,6 @@ const fillSampleData = async (ctx) => {
     productid: 2,
     limit: 10
   })
-
   await packProductService.create(ctx, {
     packid: 2,
     productid: 1,
